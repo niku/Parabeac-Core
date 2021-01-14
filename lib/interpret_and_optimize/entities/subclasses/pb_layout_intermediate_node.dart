@@ -12,7 +12,7 @@ import 'package:parabeac_core/interpret_and_optimize/value_objects/point.dart';
 abstract class PBLayoutIntermediateNode extends PBIntermediateNode
     implements PBInjectedIntermediate {
   /// LayoutNodes support 0 or multiple children.
-  List _children = [];
+  List<PBIntermediateNode> _children = [];
 
   ///Getting the children
   List<PBIntermediateNode> get children => List.from(_children);
@@ -44,10 +44,12 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
 
   ///Replace the current children with the [children]
   void replaceChildren(List<PBIntermediateNode> children) {
-    if (children != null || children.isNotEmpty) {
+    if (children != null && children.isNotEmpty) {
       _children = children;
+      _children.removeWhere((PBIntermediateNode element) =>
+          element.topLeftCorner == null || element.bottomRightCorner == null);
+      _resize();
     }
-    _resize();
   }
 
   /// Replace the child at `index` for `replacement`.
