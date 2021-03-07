@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:parabeac_core/controllers/main_info.dart';
 import 'package:parabeac_core/design_logic/design_node.dart';
 import 'package:parabeac_core/design_logic/pb_style.dart';
 import 'package:parabeac_core/input/helper/azure_asset_service.dart';
@@ -103,10 +106,18 @@ class Oval implements DesignNodeFactory, DesignNode {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    var img = await AzureAssetService().downloadImage(UUID);
-
-    return Future.value(
-        InheritedOval(this, name, currentContext: currentContext, image: img));
+    var img;
+    try {
+      img = await AzureAssetService().downloadImage(UUID);
+    } catch (e) {
+      img = File(
+              '${MainInfo().cwd.path}/lib/input/assets/image-conversion-error.png')
+          .readAsBytesSync();
+      print(e.toString());
+    } finally {
+      return Future.value(InheritedOval(this, name,
+          currentContext: currentContext, image: img));
+    }
   }
 
   @override

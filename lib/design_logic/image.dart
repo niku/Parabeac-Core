@@ -93,15 +93,24 @@ class Image extends DesignElement implements DesignNodeFactory, DesignNode {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    var img = await AzureAssetService().downloadImage(UUID);
     var file =
         File('${MainInfo().outputPath}pngs/${UUID}.png'.replaceAll(':', '_'))
           ..createSync(recursive: true);
-    file.writeAsBytesSync(img);
-    return Future.value(InheritedBitmap(
-      this,
-      name,
-      currentContext: currentContext,
-    ));
+    var img;
+    try {
+      img = await AzureAssetService().downloadImage(UUID);
+    } catch (e) {
+      img = File(
+              '${MainInfo().cwd.path}/lib/input/assets/image-conversion-error.png')
+          .readAsBytesSync();
+      print(e.toString());
+    } finally {
+      file.writeAsBytesSync(img);
+      return Future.value(InheritedBitmap(
+        this,
+        name,
+        currentContext: currentContext,
+      ));
+    }
   }
 }

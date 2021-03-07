@@ -101,16 +101,27 @@ class Vector implements DesignNodeFactory, DesignNode, Image {
 
   @override
   Future<PBIntermediateNode> interpretNode(PBContext currentContext) async {
-    var img = await AzureAssetService().downloadImage(UUID);
-
-    imageReference = AssetProcessingService.getImageName(UUID);
-
     var file =
         File('${MainInfo().outputPath}pngs/${UUID}.png'.replaceAll(':', '_'))
           ..createSync(recursive: true);
-    file.writeAsBytesSync(img);
-    return Future.value(
-        InheritedBitmap(this, name, currentContext: currentContext));
+    var img;
+    try {
+      imageReference = AssetProcessingService.getImageName(UUID);
+
+      img = await AzureAssetService().downloadImage(UUID);
+    } catch (e) {
+      img = File(
+              '${MainInfo().cwd.path}/lib/input/assets/image-conversion-error.png')
+          .readAsBytesSync();
+      print(e.toString());
+    } finally {
+      file.writeAsBytesSync(img);
+      return Future.value(InheritedBitmap(
+        this,
+        name,
+        currentContext: currentContext,
+      ));
+    }
   }
 
   @override
