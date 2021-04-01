@@ -147,14 +147,16 @@ ${parser.usage}
       MainInfo().pbdf = json.decode(jsonString);
     }
     Process process;
-    if (!jsonOnly) {
-      var file = await FileSystemEntity.isFile(path);
-      var exists = await File(path).exists();
+    //Moved this outisde of the if statement because of the pivot. We are now not taking only PBDL but PBDL and the sketch file, therefore, we are
+    //going to need the sketch path when processing pbdl (jsonOnly)
+    var file = await FileSystemEntity.isFile(path);
+    var exists = await File(path).exists();
 
-      if (!file || !exists) {
-        handleError('$path is not a file');
-      }
-      MainInfo().sketchPath = path;
+    if (!file || !exists) {
+      handleError('$path is not a file');
+    }
+    MainInfo().sketchPath = path;
+    if (!jsonOnly) {
       InputDesignService(path);
 
       if (!Platform.environment.containsKey('SAC_ENDPOINT')) {
