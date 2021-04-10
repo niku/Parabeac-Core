@@ -25,10 +25,13 @@ class ImportHelper {
       id = node.UUID;
     }
 
-    var nodePath = PBGenCache().getPath(id);
+    var nodePaths = PBGenCache().getPaths(id);
     // Make sure nodePath exists and is not the same as path (importing yourself)
-    if (nodePath != null && nodePath.isNotEmpty && path != nodePath) {
-      imports.add(PBGenCache().getRelativePath(path, id));
+    if (nodePaths != null &&
+        nodePaths.isNotEmpty &&
+        !nodePaths.any((element) => element == path)) {
+      var paths = PBGenCache().getRelativePath(path, id);
+      paths.forEach(imports.add);
     }
 
     // Recurse through child/children and add to imports
@@ -39,7 +42,7 @@ class ImportHelper {
       imports.addAll(findImports(node.navbar, path));
       imports.addAll(findImports(node.tabbar, path));
       imports.addAll(findImports(node.child, path));
-    } else if (node is InjectedNavbar) {
+    } else if (node is InjectedAppbar) {
       imports.addAll(findImports(node.leadingItem, path));
       imports.addAll(findImports(node.middleItem, path));
       imports.addAll(findImports(node.trailingItem, path));
