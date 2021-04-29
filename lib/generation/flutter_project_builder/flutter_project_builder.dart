@@ -125,6 +125,9 @@ class FlutterProjectBuilder {
         log.error(e.toString());
       });
     }
+
+    _generateTemplates();
+
     await Future.wait(PBStateManagementLinker().stateQueue, eagerError: true);
     await generationConfiguration.generateProject(mainTree);
 
@@ -163,5 +166,12 @@ class FlutterProjectBuilder {
               workingDirectory: MainInfo().outputPath)
           .stdout,
     );
+  }
+
+  void _generateTemplates() {
+    for (var template in mainTree.genProjectData?.templates) {
+      var widget = template.generateTemplate();
+      // TODO: Write widget to its respective file once widget is generated.
+    }
   }
 }

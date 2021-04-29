@@ -3,7 +3,7 @@ import 'package:parabeac_core/generation/semi_constant_templates/semi_constant_t
 
 class PBGenerationProjectData {
   // List of current templates on the project
-  List<SemiConstantTemplate> templates = [];
+  final List<SemiConstantTemplate> templates = [];
 
   // Add template to the project
   // only if the template is not already part of
