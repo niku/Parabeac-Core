@@ -31,9 +31,6 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
       {this.currentContext})
       : super(topLeftCorner, bottomRightCorner, currentContext, name) {
     generator = PBAppBarGenerator();
-    addAttribute(PBAttribute('leading'));
-    addAttribute(PBAttribute('title'));
-    addAttribute(PBAttribute('actions'));
   }
 
   @override
@@ -43,6 +40,7 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
           .originalRef
           .name
           .contains('<leading>')) {
+        addAttribute(PBAttribute('leading'));
         getAttributeNamed('leading').attributeNode = node;
       }
 
@@ -50,12 +48,14 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
           .originalRef
           .name
           .contains('<trailing>')) {
+        addAttribute(PBAttribute('actions'));
         getAttributeNamed('actions').attributeNode = node;
       }
       if ((node as PBInheritedIntermediate)
           .originalRef
           .name
           .contains('<middle>')) {
+        addAttribute(PBAttribute('title'));
         getAttributeNamed('title').attributeNode = node;
       }
     }
