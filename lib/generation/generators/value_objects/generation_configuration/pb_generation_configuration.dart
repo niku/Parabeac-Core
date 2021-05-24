@@ -127,17 +127,18 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
       generationManager.data = tree.data;
       var fileName = tree.identifier?.snakeCase ?? 'no_name_found';
 
+      // TODO: I think this is not necessary anymore
       // Relative path to the file to create
-      var relPath = '${tree.name.snakeCase}/$fileName';
-      // Change relative path if current tree is part of multi-platform setup
-      if (poLinker.screenHasMultiplePlatforms(tree.identifier)) {
-        var platformFolder =
-            poLinker.stripPlatform(tree.rootNode.managerData.platform);
-        relPath = '$fileName/$platformFolder/$fileName';
-      }
+      // var relPath = '${tree.name.snakeCase}/$fileName';
+      // // Change relative path if current tree is part of multi-platform setup
+      // if (poLinker.screenHasMultiplePlatforms(tree.identifier)) {
+      //   var platformFolder =
+      //       poLinker.stripPlatform(tree.rootNode.managerData.platform);
+      //   relPath = '$fileName/$platformFolder/$fileName';
+      // }
       if (tree.rootNode is InheritedScaffold &&
           (tree.rootNode as InheritedScaffold).isHomeScreen) {
-        await _setMainScreen(tree, '$relPath.dart');
+        await _setMainScreen(tree);
       }
       await _iterateNode(tree.rootNode);
 
@@ -246,10 +247,9 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     }
   }
 
-  Future<void> _setMainScreen(
-      PBIntermediateTree tree, String outputMain) async {
+  Future<void> _setMainScreen(PBIntermediateTree tree) async {
     var writer = pageWriter;
-    var nodeInfo = _determineNode(tree, outputMain);
+    var nodeInfo = _determineNode(tree);
     if (writer is PBFlutterWriter) {
       await writer.writeMainScreenWithHome(
           nodeInfo[0],
@@ -258,7 +258,7 @@ abstract class GenerationConfiguration with PBPlatformOrientationGeneration {
     }
   }
 
-  List<String> _determineNode(PBIntermediateTree tree, String outputMain) {
+  List<String> _determineNode(PBIntermediateTree tree) {
     var rootName = tree.rootNode.name;
     if (rootName.contains('_')) {
       rootName = rootName.split('_')[0].pascalCase;
