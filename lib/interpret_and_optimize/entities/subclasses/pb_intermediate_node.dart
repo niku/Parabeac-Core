@@ -86,6 +86,7 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   Point bottomRightCorner;
 
   @JsonKey(
+      name: 'boundaryRectangle',
       fromJson: DeserializedRectangle.fromJson,
       toJson: DeserializedRectangle.toJson)
   Rectangle frame;
@@ -206,12 +207,6 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
 
   Map<String, dynamic> toJson() => _$PBIntermediateNodeToJson(this);
 
-  static Map sizeFromJson(Map<String, dynamic> json) {
-    return {
-      'width': json['width'],
-      'height': json['height'],
-    };
-  }
 
   void mapRawChildren(Map<String, dynamic> json) {
     var rawChildren = json['children'] as List;

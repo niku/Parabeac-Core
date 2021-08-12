@@ -33,9 +33,6 @@ class InjectedContainer extends PBVisualIntermediateNode
   @override
   @JsonKey()
   String type = 'injected_container';
-  @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson)
-  Map size;
 
   InjectedContainer(
     UUID,
@@ -46,7 +43,6 @@ class InjectedContainer extends PBVisualIntermediateNode
     String color,
     PBContext currentContext,
     this.prototypeNode,
-    this.size,
     this.type,
   }) : super(
           UUID,

@@ -36,10 +36,6 @@ class InheritedBitmap extends PBVisualIntermediateNode
   String type = 'image';
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
-
-  @override
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
@@ -51,7 +47,6 @@ class InheritedBitmap extends PBVisualIntermediateNode
     PBContext currentContext,
     this.referenceImage,
     this.prototypeNode,
-    this.size,
   }) : super(
           UUID,
           frame,

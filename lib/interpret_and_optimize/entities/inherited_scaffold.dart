@@ -39,9 +39,6 @@ class InheritedScaffold extends PBVisualIntermediateNode
   String type = 'artboard';
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
-  @override
   @JsonKey(ignore: true)
   PBIntermediateNode get child => getAttributeNamed('body')?.attributeNode;
 
@@ -74,7 +71,6 @@ class InheritedScaffold extends PBVisualIntermediateNode
     PBContext currentContext,
     this.isHomeScreen,
     this.prototypeNode,
-    this.size,
   }) : super(
           UUID,
           frame,

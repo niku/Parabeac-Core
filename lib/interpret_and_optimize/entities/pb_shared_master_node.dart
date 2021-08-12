@@ -35,10 +35,6 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
   @JsonKey()
   String type = 'shared_master';
 
-  @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
-
   List<PBSymbolMasterParameter> parametersDefinition;
   Map<String, PBSymbolMasterParameter> parametersDefsMap = {};
 
@@ -74,7 +70,6 @@ class PBSharedMasterNode extends PBVisualIntermediateNode
     this.overridableProperties,
     PBContext currentContext,
     this.prototypeNode,
-    this.size,
   }) : super(
           UUID,
           frame,

@@ -9,12 +9,11 @@ part of 'inherited_shape_group.dart';
 InheritedShapeGroup _$InheritedShapeGroupFromJson(Map<String, dynamic> json) {
   return InheritedShapeGroup(
     json['UUID'] as String,
-    DeserializedRectangle.fromJson(json['frame'] as Map<String, dynamic>),
+    DeserializedRectangle.fromJson(
+        json['boundaryRectangle'] as Map<String, dynamic>),
     name: json['name'] as String,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
         json['prototypeNodeUUID'] as String),
-    size: PBIntermediateNode.sizeFromJson(
-        json['boundaryRectangle'] as Map<String, dynamic>),
   )
     ..parent = json['parent'] == null
         ? null
@@ -28,6 +27,7 @@ InheritedShapeGroup _$InheritedShapeGroupFromJson(Map<String, dynamic> json) {
         json['topLeftCorner'] as Map<String, dynamic>)
     ..bottomRightCorner = PBPointLegacyMethod.bottomRightFromJson(
         json['bottomRightCorner'] as Map<String, dynamic>)
+    ..size = json['size'] as Map<String, dynamic>
     ..auxiliaryData = json['style'] == null
         ? null
         : IntermediateAuxiliaryData.fromJson(
@@ -46,10 +46,10 @@ Map<String, dynamic> _$InheritedShapeGroupToJson(
       'topLeftCorner': PBPointLegacyMethod.toJson(instance.topLeftCorner),
       'bottomRightCorner':
           PBPointLegacyMethod.toJson(instance.bottomRightCorner),
-      'frame': DeserializedRectangle.toJson(instance.frame),
+      'boundaryRectangle': DeserializedRectangle.toJson(instance.frame),
+      'size': instance.size,
       'style': instance.auxiliaryData,
       'name': instance.name,
       'prototypeNodeUUID': instance.prototypeNode,
       'type': instance.type,
-      'boundaryRectangle': instance.size,
     };

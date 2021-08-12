@@ -32,11 +32,6 @@ class InheritedPolygon extends PBVisualIntermediateNode
   @override
   @JsonKey()
   String type = 'polygon';
-
-  @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
-
   @override
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
@@ -47,7 +42,6 @@ class InheritedPolygon extends PBVisualIntermediateNode
     Uint8List image,
     PBContext currentContext,
     this.prototypeNode,
-    this.size,
   }) : super(
           UUID,
           frame,

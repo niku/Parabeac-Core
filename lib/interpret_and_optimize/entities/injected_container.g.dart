@@ -9,11 +9,11 @@ part of 'injected_container.dart';
 InjectedContainer _$InjectedContainerFromJson(Map<String, dynamic> json) {
   return InjectedContainer(
     json['UUID'],
-    DeserializedRectangle.fromJson(json['frame'] as Map<String, dynamic>),
+    DeserializedRectangle.fromJson(
+        json['boundaryRectangle'] as Map<String, dynamic>),
     name: json['name'] as String,
     prototypeNode:
         PrototypeNode.prototypeNodeFromJson(json['prototypeNode'] as String),
-    size: PBIntermediateNode.sizeFromJson(json['size'] as Map<String, dynamic>),
     type: json['type'] as String,
   )
     ..parent = json['parent'] == null
@@ -21,10 +21,19 @@ InjectedContainer _$InjectedContainerFromJson(Map<String, dynamic> json) {
         : PBIntermediateNode.fromJson(json['parent'] as Map<String, dynamic>)
     ..treeLevel = json['treeLevel'] as int
     ..subsemantic = json['subsemantic'] as String
+    ..children = (json['children'] as List)
+        ?.map((e) => e == null
+            ? null
+            : PBIntermediateNode.fromJson(e as Map<String, dynamic>))
+        ?.toList()
+    ..child = json['child'] == null
+        ? null
+        : PBIntermediateNode.fromJson(json['child'] as Map<String, dynamic>)
     ..topLeftCorner = PBPointLegacyMethod.topLeftFromJson(
         json['topLeftCorner'] as Map<String, dynamic>)
     ..bottomRightCorner = PBPointLegacyMethod.bottomRightFromJson(
         json['bottomRightCorner'] as Map<String, dynamic>)
+    ..size = json['size'] as Map<String, dynamic>
     ..auxiliaryData = json['style'] == null
         ? null
         : IntermediateAuxiliaryData.fromJson(
@@ -37,13 +46,15 @@ Map<String, dynamic> _$InjectedContainerToJson(InjectedContainer instance) =>
       'treeLevel': instance.treeLevel,
       'subsemantic': instance.subsemantic,
       'UUID': instance.UUID,
+      'children': instance.children,
+      'child': instance.child,
       'topLeftCorner': PBPointLegacyMethod.toJson(instance.topLeftCorner),
       'bottomRightCorner':
           PBPointLegacyMethod.toJson(instance.bottomRightCorner),
-      'frame': DeserializedRectangle.toJson(instance.frame),
+      'boundaryRectangle': DeserializedRectangle.toJson(instance.frame),
+      'size': instance.size,
       'style': instance.auxiliaryData,
       'name': instance.name,
       'prototypeNode': instance.prototypeNode,
       'type': instance.type,
-      'size': instance.size,
     };

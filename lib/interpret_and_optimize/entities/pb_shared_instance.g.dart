@@ -10,7 +10,8 @@ PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
     Map<String, dynamic> json) {
   return PBSharedInstanceIntermediateNode(
     json['UUID'] as String,
-    DeserializedRectangle.fromJson(json['frame'] as Map<String, dynamic>),
+    DeserializedRectangle.fromJson(
+        json['boundaryRectangle'] as Map<String, dynamic>),
     SYMBOL_ID: json['symbolID'] as String,
     sharedParamValues: (json['overrideValues'] as List)
         ?.map((e) => e == null
@@ -19,8 +20,6 @@ PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
         ?.toList(),
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
         json['prototypeNodeUUID'] as String),
-    size: PBIntermediateNode.sizeFromJson(
-        json['boundaryRectangle'] as Map<String, dynamic>),
     name: json['name'] as String,
   )
     ..subsemantic = json['subsemantic'] as String
@@ -36,6 +35,7 @@ PBSharedInstanceIntermediateNode _$PBSharedInstanceIntermediateNodeFromJson(
         json['topLeftCorner'] as Map<String, dynamic>)
     ..bottomRightCorner = PBPointLegacyMethod.bottomRightFromJson(
         json['bottomRightCorner'] as Map<String, dynamic>)
+    ..size = json['size'] as Map<String, dynamic>
     ..auxiliaryData = json['style'] == null
         ? null
         : IntermediateAuxiliaryData.fromJson(
@@ -53,7 +53,8 @@ Map<String, dynamic> _$PBSharedInstanceIntermediateNodeToJson(
       'topLeftCorner': PBPointLegacyMethod.toJson(instance.topLeftCorner),
       'bottomRightCorner':
           PBPointLegacyMethod.toJson(instance.bottomRightCorner),
-      'frame': DeserializedRectangle.toJson(instance.frame),
+      'boundaryRectangle': DeserializedRectangle.toJson(instance.frame),
+      'size': instance.size,
       'style': instance.auxiliaryData?.toJson(),
       'name': instance.name,
       'symbolID': instance.SYMBOL_ID,
@@ -61,7 +62,6 @@ Map<String, dynamic> _$PBSharedInstanceIntermediateNodeToJson(
           instance.sharedParamValues?.map((e) => e?.toJson())?.toList(),
       'prototypeNodeUUID': instance.prototypeNode?.toJson(),
       'type': instance.type,
-      'boundaryRectangle': instance.size,
     };
 
 PBSharedParameterValue _$PBSharedParameterValueFromJson(

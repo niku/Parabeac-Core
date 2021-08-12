@@ -27,9 +27,6 @@ class InheritedCircle extends PBVisualIntermediateNode
   @JsonKey()
   String type = 'circle';
 
-  @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
 
   @override
   @JsonKey(ignore: true)
@@ -43,7 +40,6 @@ class InheritedCircle extends PBVisualIntermediateNode
     PBContext currentContext,
     Point alignX,
     Point alignY,
-    this.size,
     this.prototypeNode,
   }) : super(
           UUID,

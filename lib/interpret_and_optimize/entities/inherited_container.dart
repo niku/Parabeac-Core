@@ -35,10 +35,6 @@ class InheritedContainer extends PBVisualIntermediateNode
   String type = 'rectangle';
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
-
-  @override
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
@@ -56,7 +52,6 @@ class InheritedContainer extends PBVisualIntermediateNode
     double alignY,
     PBContext currentContext,
     this.isBackgroundVisible = true,
-    this.size,
     this.prototypeNode,
   }) : super(
           UUID,

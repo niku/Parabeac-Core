@@ -36,10 +36,6 @@ class InheritedText extends PBVisualIntermediateNode
   @JsonKey()
   String type = 'text';
 
-  @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
-
   @JsonKey(name: 'content')
   String text;
   @JsonKey(ignore: true)
@@ -65,7 +61,6 @@ class InheritedText extends PBVisualIntermediateNode
     this.originalRef,
     name,
     PBContext currentContext,
-    this.size,
     this.alignmenttype,
     this.fontName,
     this.fontSize,
@@ -119,7 +114,6 @@ class InheritedText extends PBVisualIntermediateNode
       // bottomRightCorner: inheritedText.bottomRightCorner,
       name: inheritedText.name,
       currentContext: inheritedText.currentContext,
-      size: inheritedText.size,
       originalRef: json,
     )..addChild(inheritedText);
   }

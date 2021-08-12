@@ -9,10 +9,9 @@ part of 'inherited_text.dart';
 InheritedText _$InheritedTextFromJson(Map<String, dynamic> json) {
   return InheritedText(
     json['UUID'] as String,
-    DeserializedRectangle.fromJson(json['frame'] as Map<String, dynamic>),
-    name: json['name'],
-    size: PBIntermediateNode.sizeFromJson(
+    DeserializedRectangle.fromJson(
         json['boundaryRectangle'] as Map<String, dynamic>),
+    name: json['name'],
     isTextParameter: json['isTextParameter'] as bool ?? false,
     prototypeNode: PrototypeNode.prototypeNodeFromJson(
         json['prototypeNodeUUID'] as String),
@@ -35,6 +34,7 @@ InheritedText _$InheritedTextFromJson(Map<String, dynamic> json) {
         json['topLeftCorner'] as Map<String, dynamic>)
     ..bottomRightCorner = PBPointLegacyMethod.bottomRightFromJson(
         json['bottomRightCorner'] as Map<String, dynamic>)
+    ..size = json['size'] as Map<String, dynamic>
     ..auxiliaryData = json['style'] == null
         ? null
         : IntermediateAuxiliaryData.fromJson(
@@ -53,12 +53,12 @@ Map<String, dynamic> _$InheritedTextToJson(InheritedText instance) =>
       'topLeftCorner': PBPointLegacyMethod.toJson(instance.topLeftCorner),
       'bottomRightCorner':
           PBPointLegacyMethod.toJson(instance.bottomRightCorner),
-      'frame': DeserializedRectangle.toJson(instance.frame),
+      'boundaryRectangle': DeserializedRectangle.toJson(instance.frame),
+      'size': instance.size,
       'style': instance.auxiliaryData,
       'name': instance.name,
       'isTextParameter': instance.isTextParameter,
       'prototypeNodeUUID': instance.prototypeNode,
       'type': instance.type,
-      'boundaryRectangle': instance.size,
       'content': instance.text,
     };

@@ -49,10 +49,6 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
   @JsonKey()
   String type = 'shared_instance';
 
-  @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
-
   List<PBSymbolInstanceOverridableValue> overrideValues;
   // quick lookup based on UUID_type
   Map<String, PBSymbolInstanceOverridableValue> overrideValuesMap = {};
@@ -69,7 +65,6 @@ class PBSharedInstanceIntermediateNode extends PBVisualIntermediateNode
     this.sharedParamValues,
     PBContext currentContext,
     this.prototypeNode,
-    this.size,
     this.overrideValues,
     String name,
   }) : super(

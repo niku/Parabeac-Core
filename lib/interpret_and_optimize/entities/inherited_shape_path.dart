@@ -34,10 +34,6 @@ class InheritedShapePath extends PBVisualIntermediateNode
   String type = 'image';
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
-
-  @override
   @JsonKey(ignore: true)
   Map<String, dynamic> originalRef;
 
@@ -49,7 +45,6 @@ class InheritedShapePath extends PBVisualIntermediateNode
     Uint8List image,
     PBContext currentContext,
     this.prototypeNode,
-    this.size,
   }) : super(
           UUID,
           frame,

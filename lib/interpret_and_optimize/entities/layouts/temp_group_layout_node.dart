@@ -30,10 +30,6 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
   String type = 'group';
 
   @override
-  @JsonKey(fromJson: PBIntermediateNode.sizeFromJson, name: 'boundaryRectangle')
-  Map size;
-
-  @override
   Map<String, dynamic> originalRef;
 
   TempGroupLayoutNode(
@@ -43,7 +39,6 @@ class TempGroupLayoutNode extends PBLayoutIntermediateNode
     PBContext currentContext,
     String name,
     this.prototypeNode,
-    this.size,
   }) : super(UUID, frame, [], [], currentContext, name);
 
   @override
