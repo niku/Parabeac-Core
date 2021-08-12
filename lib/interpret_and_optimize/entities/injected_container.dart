@@ -53,8 +53,8 @@ class InjectedContainer extends PBVisualIntermediateNode
     generator = PBContainerGenerator();
 
     size = {
-      'width': (bottomRightCorner.x - topLeftCorner.x).abs(),
-      'height': (bottomRightCorner.y - topLeftCorner.y).abs(),
+      'width': (frame.bottomRight.x - frame.topLeft.x).abs(),
+      'height': (frame.bottomRight.y - frame.topLeft.y).abs(),
     };
   }
 

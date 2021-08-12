@@ -70,8 +70,8 @@ class InheritedContainer extends PBVisualIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) {
     var container = _$InheritedContainerFromJson(json)
-      // ..topLeftCorner = Point.topLeftFromJson(json)
-      // ..bottomRightCorner = Point.bottomRightFromJson(json)
+      // ..frame.topLeft = Point.topLeftFromJson(json)
+      // ..frame.bottomRight = Point.bottomRightFromJson(json)
       ..originalRef = json;
 
     container.mapRawChildren(json);

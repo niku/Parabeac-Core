@@ -5,7 +5,7 @@ import 'dart:math';
 ///provides comparison function for UI elements.
 mixin AxisComparisonRule {
   ///Returns if the points [topLeftCorner0] and [bottomRightCorner0]
-  ///are within the `horizontal range` of the second set of points [topLeftCorner1] and [bottomRightCorner]..
+  ///are within the `horizontal range` of the second set of points [topLeftCorner1] and [frame.bottomRight]..
   bool areXCoordinatesOverlapping(
           Point topLeftCorner0,
           Point bottomRightCorner0,
@@ -17,7 +17,7 @@ mixin AxisComparisonRule {
           bottomRightCorner1.x > topLeftCorner0.x;
 
   ///Returns if the points [topLeftCorner0] and [bottomRightCorner0]
-  ///are within the `vertical range` of the second set of points [topLeftCorner1] and [bottomRightCorner].
+  ///are within the `vertical range` of the second set of points [topLeftCorner1] and [frame.bottomRight].
   bool areYCoordinatesOverlapping(
           Point topLeftCorner0,
           Point bottomRightCorner0,
@@ -31,51 +31,51 @@ mixin AxisComparisonRule {
 
 ///Returns if the points [topLeftCorner0] and [bottomRightCorner0]
 ///are within the `horizontal range` and not in the `vertical range`
-/// of the second set of points [topLeftCorner1] and [bottomRightCorner].
+/// of the second set of points [topLeftCorner1] and [frame.bottomRight].
 class HorizontalNodesLayoutRule extends LayoutRule with AxisComparisonRule {
   @override
   bool testRule(PBIntermediateNode currentNode, PBIntermediateNode nextNode) =>
       (!(areXCoordinatesOverlapping(
-          currentNode.topLeftCorner,
-          currentNode.bottomRightCorner,
-          nextNode.topLeftCorner,
-          nextNode.bottomRightCorner))) &&
+          currentNode.frame.topLeft,
+          currentNode.frame.bottomRight,
+          nextNode.frame.topLeft,
+          nextNode.frame.bottomRight))) &&
       areYCoordinatesOverlapping(
-          currentNode.topLeftCorner,
-          currentNode.bottomRightCorner,
-          nextNode.topLeftCorner,
-          nextNode.bottomRightCorner);
+          currentNode.frame.topLeft,
+          currentNode.frame.bottomRight,
+          nextNode.frame.topLeft,
+          nextNode.frame.bottomRight);
 }
 
 ///Returns if the points [topLeftCorner0] and [bottomRightCorner0]
 ///are within the `vertical range` and not in the `horicontal range`
-/// of the second set of points [topLeftCorner1] and [bottomRightCorner].
+/// of the second set of points [topLeftCorner1] and [frame.bottomRight].
 class VerticalNodesLayoutRule extends LayoutRule with AxisComparisonRule {
   @override
   bool testRule(PBIntermediateNode currentNode, PBIntermediateNode nextNode) =>
       (!(areYCoordinatesOverlapping(
-          currentNode.topLeftCorner,
-          currentNode.bottomRightCorner,
-          nextNode.topLeftCorner,
-          nextNode.bottomRightCorner))) &&
+          currentNode.frame.topLeft,
+          currentNode.frame.bottomRight,
+          nextNode.frame.topLeft,
+          nextNode.frame.bottomRight))) &&
       areXCoordinatesOverlapping(
-          currentNode.topLeftCorner,
-          currentNode.bottomRightCorner,
-          nextNode.topLeftCorner,
-          nextNode.bottomRightCorner);
+          currentNode.frame.topLeft,
+          currentNode.frame.bottomRight,
+          nextNode.frame.topLeft,
+          nextNode.frame.bottomRight);
 }
 
 class OverlappingNodesLayoutRule extends LayoutRule with AxisComparisonRule {
   @override
   bool testRule(PBIntermediateNode currentNode, PBIntermediateNode nextNode) =>
       (areXCoordinatesOverlapping(
-          currentNode.topLeftCorner,
-          currentNode.bottomRightCorner,
-          nextNode.topLeftCorner,
-          nextNode.bottomRightCorner)) &&
+          currentNode.frame.topLeft,
+          currentNode.frame.bottomRight,
+          nextNode.frame.topLeft,
+          nextNode.frame.bottomRight)) &&
       areYCoordinatesOverlapping(
-          currentNode.topLeftCorner,
-          currentNode.bottomRightCorner,
-          nextNode.topLeftCorner,
-          nextNode.bottomRightCorner);
+          currentNode.frame.topLeft,
+          currentNode.frame.bottomRight,
+          nextNode.frame.topLeft,
+          nextNode.frame.bottomRight);
 }

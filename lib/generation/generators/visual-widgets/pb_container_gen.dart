@@ -30,10 +30,9 @@ class PBContainerGenerator extends PBGenerator {
     // }
 
     if (source.child != null) {
-      source.child.topLeftCorner =
-          Point(source.topLeftCorner.x, source.topLeftCorner.y);
-      source.child.bottomRightCorner =
-          Point(source.bottomRightCorner.x, source.bottomRightCorner.y);
+      source.frame = Rectangle.fromPoints(
+          Point(source.frame.topLeft.x, source.frame.topLeft.y),
+          Point(source.frame.bottomRight.x, source.frame.bottomRight.y));
       source.child.currentContext = source.currentContext;
       var statement = source.child != null
           ? 'child: ${source.child.generator.generate(source.child, generatorContext)}'

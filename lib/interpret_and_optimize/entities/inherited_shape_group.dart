@@ -63,8 +63,8 @@ class InheritedShapeGroup extends PBVisualIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) {
     var group = _$InheritedShapeGroupFromJson(json)
-      // ..topLeftCorner = Point.topLeftFromJson(json)
-      // ..bottomRightCorner = Point.bottomRightFromJson(json)
+      // ..frame.topLeft = Point.topLeftFromJson(json)
+      // ..frame.bottomRight = Point.bottomRightFromJson(json)
       ..originalRef = json;
 
     group.mapRawChildren(json);

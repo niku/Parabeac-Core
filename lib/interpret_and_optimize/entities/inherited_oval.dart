@@ -53,8 +53,8 @@ class InheritedOval extends PBVisualIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedOvalFromJson(json)
-        // ..topLeftCorner = Point.topLeftFromJson(json)
-        // ..bottomRightCorner = Point.bottomRightFromJson(json)
+        // ..frame.topLeft = Point.topLeftFromJson(json)
+        // ..frame.bottomRight = Point.bottomRightFromJson(json)
         ..originalRef = json;
 
   @override

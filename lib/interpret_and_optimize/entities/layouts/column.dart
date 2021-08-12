@@ -76,19 +76,19 @@ class ColumnAlignment extends AlignStrategy<PBIntermediateColumnLayout> {
   }
 
   void _addParallelAlignment(PBIntermediateColumnLayout node) {
-    var newchildren = handleFlex(true, node.topLeftCorner,
-        node.bottomRightCorner, node.children?.cast<PBIntermediateNode>());
+    var newchildren = handleFlex(true, node.frame.topLeft,
+        node.frame.bottomRight, node.children?.cast<PBIntermediateNode>());
     node.replaceChildren(newchildren);
   }
 
   void _addPerpendicularAlignment(PBIntermediateColumnLayout node) {
-    var columnMinX = node.topLeftCorner.x;
-    var columnMaxX = node.bottomRightCorner.x;
+    var columnMinX = node.frame.topLeft.x;
+    var columnMaxX = node.frame.bottomRight.x;
 
     for (var i = 0; i < node.children.length; i++) {
       var padding = Padding(null, node.frame, node.children[i].constraints,
-          left: node.children[i].topLeftCorner.x - columnMinX ?? 0.0,
-          right: columnMaxX - node.children[i].bottomRightCorner.x ?? 0.0,
+          left: node.children[i].frame.topLeft.x - columnMinX ?? 0.0,
+          right: columnMaxX - node.children[i].frame.bottomRight.x ?? 0.0,
           top: 0.0,
           bottom: 0.0,
           currentContext: node.currentContext);

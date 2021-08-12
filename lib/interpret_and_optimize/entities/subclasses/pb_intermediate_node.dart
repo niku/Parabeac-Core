@@ -21,10 +21,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'pb_intermediate_node.g.dart';
 
 @JsonSerializable(
-  explicitToJson: true,
-  createFactory: false,
-  ignoreUnannotated: true
-)
+    explicitToJson: true, createFactory: false, ignoreUnannotated: true)
 abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   @JsonKey(ignore: true)
   Logger logger;
@@ -76,23 +73,10 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
   }
 
   @JsonKey(
-      fromJson: PBPointLegacyMethod.topLeftFromJson,
-      toJson: PBPointLegacyMethod.toJson)
-  Point topLeftCorner;
-
-  @JsonKey(
-      fromJson: PBPointLegacyMethod.bottomRightFromJson,
-      toJson: PBPointLegacyMethod.toJson)
-  Point bottomRightCorner;
-
-  @JsonKey(
       name: 'boundaryRectangle',
       fromJson: DeserializedRectangle.fromJson,
       toJson: DeserializedRectangle.toJson)
   Rectangle frame;
-
-  double get width => (bottomRightCorner.x - topLeftCorner.x).toDouble();
-  double get height => (bottomRightCorner.y - topLeftCorner.y).toDouble();
 
   @JsonKey(ignore: true)
   PBContext currentContext;
@@ -113,23 +97,23 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
       {this.currentContext, this.subsemantic, this.constraints}) {
     logger = Logger(runtimeType.toString());
     _attributes = [];
-    _pointCorrection();
+    // _pointCorrection();
   }
 
   ///Correcting the pints when given the incorrect ones
-  void _pointCorrection() {
-    if (topLeftCorner != null && bottomRightCorner != null) {
-      if (topLeftCorner.x > bottomRightCorner.x &&
-          topLeftCorner.y > bottomRightCorner.y) {
-        logger.warning(
-            'Correcting the positional data. BTC is higher than TLC for node: ${this}');
-        topLeftCorner = Point(min(topLeftCorner.x, bottomRightCorner.x),
-            min(topLeftCorner.y, bottomRightCorner.y));
-        bottomRightCorner = Point(max(topLeftCorner.x, bottomRightCorner.x),
-            max(topLeftCorner.y, bottomRightCorner.y));
-      }
-    }
-  }
+  // void _pointCorrection() {
+  //   if (frame.topLeft != null && frame.bottomRight != null) {
+  //     if (frame.topLeft.x > frame.bottomRight.x &&
+  //         frame.topLeft.y > frame.bottomRight.y) {
+  //       logger.warning(
+  //           'Correcting the positional data. BTC is higher than TLC for node: ${this}');
+  //       frame.topLeft = Point(min(frame.topLeft.x, frame.bottomRight.x),
+  //           min(frame.topLeft.y, frame.bottomRight.y));
+  //       frame.bottomRight = Point(max(frame.topLeft.x, frame.bottomRight.x),
+  //           max(frame.topLeft.y, frame.bottomRight.y));
+  //     }
+  //   }
+  // }
 
   /// Returns the [PBAttribute] named `attributeName`. Returns
   /// null if the [PBAttribute] does not exist.
@@ -207,7 +191,6 @@ abstract class PBIntermediateNode extends TraversableNode<PBIntermediateNode> {
 
   Map<String, dynamic> toJson() => _$PBIntermediateNodeToJson(this);
 
-
   void mapRawChildren(Map<String, dynamic> json) {
     var rawChildren = json['children'] as List;
     rawChildren?.forEach((child) {
@@ -242,42 +225,50 @@ extension PBPointLegacyMethod on Point {
     return false;
   }
 
-  static Point topLeftFromJson(Map<String, dynamic> json) {
-    if (json == null) {
-      return null;
-    }
-    var x, y;
-    if (json.containsKey('boundaryRectangle')) {
-      x = json['boundaryRectangle']['x'];
-      y = json['boundaryRectangle']['y'];
-    } else {
-      x = json['x'];
-      y = json['y'];
-    }
-    return Point(x, y);
-  }
-
-  static Point bottomRightFromJson(Map<String, dynamic> json) {
-    if (json == null) {
-      return null;
-    }
-    var x, y;
-    if (json.containsKey('boundaryRectangle')) {
-      x = json['boundaryRectangle']['x'] + json['boundaryRectangle']['width'];
-      y = json['boundaryRectangle']['y'] + json['boundaryRectangle']['height'];
-    } else {
-      x = json['x'] + json['width'];
-      y = json['y'] + json['height'];
-    }
-    return Point(x, y);
-  }
-
   static Map toJson(Point point) => {'x': point.x, 'y': point.y};
 }
 
 extension DeserializedRectangle on Rectangle {
-  Point get topLeftCorner => topLeft;
-  Point get bottomRightCorner => bottomRight;
+  bool _areXCoordinatesOverlapping(
+          Point topLeftCorner0,
+          Point bottomRightCorner0,
+          Point topLeftCorner1,
+          Point bottomRightCorner1) =>
+      topLeftCorner1.x >= topLeftCorner0.x &&
+          topLeftCorner1.x <= bottomRightCorner0.x ||
+      bottomRightCorner1.x <= bottomRightCorner0.x &&
+          bottomRightCorner1.x >= topLeftCorner0.x;
+
+  bool _areYCoordinatesOverlapping(
+          Point topLeftCorner0,
+          Point bottomRightCorner0,
+          Point topLeftCorner1,
+          Point bottomRightCorner1) =>
+      topLeftCorner1.y >= topLeftCorner0.y &&
+          topLeftCorner1.y <= bottomRightCorner0.y ||
+      bottomRightCorner1.y <= bottomRightCorner0.y &&
+          bottomRightCorner1.y >= topLeftCorner0.y;
+
+  bool isHorizontalTo(Rectangle frame) {
+    return (!(_areXCoordinatesOverlapping(
+            topLeft, bottomRight, frame.topLeft, frame.bottomRight))) &&
+        _areYCoordinatesOverlapping(
+            topLeft, bottomRight, frame.topLeft, frame.bottomRight);
+  }
+
+  bool isVerticalTo(Rectangle frame) {
+    return (!(_areYCoordinatesOverlapping(
+            topLeft, bottomRight, frame.topLeft, frame.bottomRight))) &&
+        _areXCoordinatesOverlapping(
+            topLeft, bottomRight, frame.topLeft, frame.bottomRight);
+  }
+
+  bool isOverlappingTo(Rectangle frame) {
+    return (_areXCoordinatesOverlapping(
+            topLeft, bottomRight, frame.topLeft, frame.bottomRight)) &&
+        _areYCoordinatesOverlapping(
+            topLeft, bottomRight, frame.topLeft, frame.bottomRight);
+  }
 
   static Rectangle fromJson(Map<String, dynamic> json) {
     return Rectangle(json['x'], json['y'], json['width'], json['height']);

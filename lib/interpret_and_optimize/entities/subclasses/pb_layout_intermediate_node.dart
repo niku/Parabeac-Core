@@ -37,11 +37,9 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
 
   Map alignment = {};
 
-  PBLayoutIntermediateNode(String UUID, Rectangle frame, this._layoutRules, this._exceptions,
-      PBContext currentContext, String name,
-      {
-      this.prototypeNode,
-      PBIntermediateConstraints constraints})
+  PBLayoutIntermediateNode(String UUID, Rectangle frame, this._layoutRules,
+      this._exceptions, PBContext currentContext, String name,
+      {this.prototypeNode, PBIntermediateConstraints constraints})
       : super(UUID ?? Uuid().v4(), frame, name,
             currentContext: currentContext, constraints: constraints) {
     // Declaring children for layout node
@@ -81,18 +79,17 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
           .warning('There should be children in the layout so it can resize.');
       return;
     }
-    var minX = (children[0]).topLeftCorner.x,
-        minY = (children[0]).topLeftCorner.y,
-        maxX = (children[0]).bottomRightCorner.x,
-        maxY = (children[0]).bottomRightCorner.y;
+    var minX = (children[0]).frame.topLeft.x,
+        minY = (children[0]).frame.topLeft.y,
+        maxX = (children[0]).frame.bottomRight.x,
+        maxY = (children[0]).frame.bottomRight.y;
     for (var child in children) {
-      minX = min((child).topLeftCorner.x, minX);
-      minY = min((child).topLeftCorner.y, minY);
-      maxX = max((child).bottomRightCorner.x, maxX);
-      maxY = max((child).bottomRightCorner.y, maxY);
+      minX = min((child).frame.topLeft.x, minX);
+      minY = min((child).frame.topLeft.y, minY);
+      maxX = max((child).frame.bottomRight.x, maxX);
+      maxY = max((child).frame.bottomRight.y, maxY);
     }
-    topLeftCorner = Point(minX, minY);
-    bottomRightCorner = Point(maxX, maxY);
+    frame = Rectangle.fromPoints(Point(minX, minY), Point(maxX, maxY));
   }
 
   ///Remove Child
@@ -106,7 +103,7 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
 
   ///Sort children
   void sortChildren() => children.sort(
-      (child0, child1) => child0.topLeftCorner.compareTo(child1.topLeftCorner));
+      (child0, child1) => child0.frame.topLeft.compareTo(child1.frame.topLeft));
 
   ///The [PBLayoutIntermediateNode] contains a series of rules that determines if the children is part of that layout. All the children
   ///are going to have to meet the rules that the [PBLayoutIntermediateNode] presents. This method presents a way of comparing two children [PBIntermediateNode]
@@ -134,20 +131,20 @@ abstract class PBLayoutIntermediateNode extends PBIntermediateNode
 
   void checkCrossAxisAlignment() {
     if (attributes.first.attributeNode != null) {
-      var attributesTopLeft = attributes.first.attributeNode.topLeftCorner;
+      var attributesTopLeft = attributes.first.attributeNode.frame.topLeft;
 
       var attributesBottomRight =
-          attributes.last.attributeNode.bottomRightCorner;
+          attributes.last.attributeNode.frame.bottomRight;
 
-      var leftDifference = (topLeftCorner.x - attributesTopLeft.x).abs();
+      var leftDifference = (frame.topLeft.x - attributesTopLeft.x).abs();
 
       var rightDifference =
-          (bottomRightCorner.x - attributesBottomRight.x).abs();
+          (frame.bottomRight.x - attributesBottomRight.x).abs();
 
-      var topDifference = (topLeftCorner.y - attributesTopLeft.y).abs();
+      var topDifference = (frame.topLeft.y - attributesTopLeft.y).abs();
 
       var bottomDifference =
-          (bottomRightCorner.y - attributesBottomRight.y).abs();
+          (frame.bottomRight.y - attributesBottomRight.y).abs();
 
       if (leftDifference < rightDifference) {
         alignment['mainAxisAlignment'] =

@@ -38,8 +38,8 @@ List<PBIntermediateNode> handleFlex(bool isVertical, Point topLeft,
       var prevChild = children[i - 1];
 
       var spacerLength = isVertical
-          ? _calculateHeight(prevChild.bottomRightCorner, child.topLeftCorner)
-          : _calculateWidth(prevChild.bottomRightCorner, child.topLeftCorner);
+          ? _calculateHeight(prevChild.frame.bottomRight, child.frame.topLeft)
+          : _calculateWidth(prevChild.frame.bottomRight, child.frame.topLeft);
 
       if (spacerLength > 0) {
         var flex = _calculateFlex(spacerLength, parentLength);
@@ -47,14 +47,14 @@ List<PBIntermediateNode> handleFlex(bool isVertical, Point topLeft,
             null,
             Rectangle.fromPoints(
                 isVertical
-                    ? Point(prevChild.topLeftCorner.x,
-                        prevChild.bottomRightCorner.y)
-                    : Point(prevChild.bottomRightCorner.x,
-                        prevChild.topLeftCorner.y),
+                    ? Point(prevChild.frame.topLeft.x,
+                        prevChild.frame.bottomRight.y)
+                    : Point(prevChild.frame.bottomRight.x,
+                        prevChild.frame.topLeft.y),
                 isVertical
-                    ? Point(child.bottomRightCorner.x, child.topLeftCorner.y)
-                    : Point(child.topLeftCorner.x,
-                        child.bottomRightCorner.y)), //brc
+                    ? Point(child.frame.bottomRight.x, child.frame.topLeft.y)
+                    : Point(child.frame.topLeft.x,
+                        child.frame.bottomRight.y)), //brc
 
             flex: flex,
             currentContext: children.first.currentContext));
@@ -80,8 +80,8 @@ PBIntermediateNode _putChildInFlex(
     bool isVertical, PBIntermediateNode child, double parentLength) {
   //Calculate child flex
   var widgetLength = isVertical
-      ? _calculateHeight(child.topLeftCorner, child.bottomRightCorner)
-      : _calculateWidth(child.topLeftCorner, child.bottomRightCorner);
+      ? _calculateHeight(child.frame.topLeft, child.frame.bottomRight)
+      : _calculateWidth(child.frame.topLeft, child.frame.bottomRight);
   var flex = _calculateFlex(widgetLength.abs(), parentLength.abs());
 
   return Flexible(null, child.frame,

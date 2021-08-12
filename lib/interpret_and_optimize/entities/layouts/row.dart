@@ -46,7 +46,7 @@ class PBIntermediateRowLayout extends PBLayoutIntermediateNode {
   @override
   void sortChildren() => replaceChildren(children
     ..sort((child0, child1) =>
-        child0.topLeftCorner.x.compareTo(child1.topLeftCorner.x)));
+        child0.frame.topLeft.x.compareTo(child1.frame.topLeft.x)));
 }
 
 class RowAlignment extends AlignStrategy<PBIntermediateRowLayout> {
@@ -63,27 +63,27 @@ class RowAlignment extends AlignStrategy<PBIntermediateRowLayout> {
   }
 
   void _addParallelAlignment(PBIntermediateRowLayout node) {
-    var newchildren = handleFlex(false, node.topLeftCorner,
-        node.bottomRightCorner, node.children?.cast<PBIntermediateNode>());
+    var newchildren = handleFlex(false, node.frame.topLeft,
+        node.frame.bottomRight, node.children?.cast<PBIntermediateNode>());
     node.replaceChildren(newchildren);
   }
 
   void _addPerpendicularAlignment(PBIntermediateRowLayout node) {
-    var rowMinY = node.topLeftCorner.y;
-    var rowMaxY = node.bottomRightCorner.y;
+    var rowMinY = node.frame.topLeft.y;
+    var rowMaxY = node.frame.bottomRight.y;
 
-    if (node.topLeftCorner.y < node.currentContext.screenTopLeftCorner.y) {
+    if (node.frame.topLeft.y < node.currentContext.screenTopLeftCorner.y) {
       rowMinY = node.currentContext.screenTopLeftCorner.y;
     }
-    if (node.bottomRightCorner.y >
+    if (node.frame.bottomRight.y >
         node.currentContext.screenBottomRightCorner.y) {
       rowMaxY = node.currentContext.screenBottomRightCorner.y;
     }
 
     for (var i = 0; i < node.children.length; i++) {
       var padding = Padding(null, node.frame, node.children[i].constraints,
-          top: node.children[i].topLeftCorner.y - rowMinY ?? 0.0,
-          bottom: rowMaxY - node.children[i].bottomRightCorner.y ?? 0.0,
+          top: node.children[i].frame.topLeft.y - rowMinY ?? 0.0,
+          bottom: rowMaxY - node.children[i].frame.bottomRight.y ?? 0.0,
           left: 0.0,
           right: 0.0,
           currentContext: node.currentContext);
@@ -108,7 +108,7 @@ class RowAlignment extends AlignStrategy<PBIntermediateRowLayout> {
   // @override
   // void sortChildren() => replaceChildren(children
   //   ..sort((child0, child1) =>
-  //       child0.topLeftCorner.x.compareTo(child1.topLeftCorner.x)));
+  //       child0.frame.topLeft.x.compareTo(child1.frame.topLeft.x)));
 
   @override
   PBIntermediateNode fromJson(Map<String, dynamic> json) => null;

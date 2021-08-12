@@ -59,8 +59,8 @@ class InheritedCircle extends PBVisualIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) =>
       _$InheritedCircleFromJson(json)
-        // ..topLeftCorner = Point.topLeftFromJson(json)
-        // ..bottomRightCorner = Point.bottomRightFromJson(json)
+        // ..frame.topLeft = Point.topLeftFromJson(json)
+        // ..frame.bottomRight = Point.bottomRightFromJson(json)
         ..originalRef = json;
 
   @override

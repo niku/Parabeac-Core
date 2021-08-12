@@ -33,8 +33,8 @@ class PBPlatformOrientationLinkerService {
   void addOrientationPlatformInformation(PBIntermediateTree tree) {
     tree.data.platform = _extractPlatform(tree.name);
     tree.data.orientation = _extractOrientation(
-      tree.rootNode.bottomRightCorner,
-      tree.rootNode.topLeftCorner,
+      tree.rootNode.frame.bottomRight,
+      tree.rootNode.frame.topLeft,
     );
 
     _platforms.add(tree.data.platform);

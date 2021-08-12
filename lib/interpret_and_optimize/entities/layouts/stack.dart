@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:parabeac_core/generation/generators/layouts/pb_stack_gen.dart';
 import 'package:parabeac_core/generation/prototyping/pb_prototype_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/alignments/injected_positioned.dart';
@@ -21,10 +23,10 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
   @override
   PrototypeNode prototypeNode;
 
-
   PBIntermediateStackLayout(PBContext currentContext,
       {String name, PBIntermediateConstraints constraints})
-      : super(null, null, STACK_RULES, [], currentContext, name, constraints: constraints) {
+      : super(null, null, STACK_RULES, [], currentContext, name,
+            constraints: constraints) {
     generator = PBStackGenerator();
     alignStrategy = PositionedAlignment();
   }
@@ -41,8 +43,8 @@ class PBIntermediateStackLayout extends PBLayoutIntermediateNode {
     /// called, then [depth] could be null. [depth] is null when the [PBIntermediateTree]
     /// has not finished creating and converting PBDL nodes into [PBIntermediateNode].
     if (depth != null && depth <= 1 && depth >= 0) {
-      topLeftCorner = currentContext.canvasTLC;
-      bottomRightCorner = currentContext.canvasBRC;
+      frame = Rectangle.fromPoints(
+          currentContext.canvasTLC, currentContext.canvasBRC);
     } else {
       super.resize();
     }

@@ -103,7 +103,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
       if (node.name.contains('<navbar>')) {
         addAttribute(PBAttribute('appBar', attributeNodes: [node]));
         currentContext.canvasTLC =
-            Point(currentContext.canvasTLC.x, node.bottomRightCorner.y);
+            Point(currentContext.canvasTLC.x, node.frame.bottomRight.y);
         return;
       }
       if (node.name.contains('<tabbar>')) {
@@ -116,7 +116,7 @@ class InheritedScaffold extends PBVisualIntermediateNode
     if (node is InjectedAppbar) {
       addAttribute(PBAttribute('appBar', attributeNodes: [node]));
       currentContext.canvasTLC =
-          Point(currentContext.canvasTLC.x, node.bottomRightCorner.y);
+          Point(currentContext.canvasTLC.x, node.frame.bottomRight.y);
       return;
     }
     if (node is InjectedTabBar) {
@@ -154,8 +154,8 @@ class InheritedScaffold extends PBVisualIntermediateNode
 
   static PBIntermediateNode fromJson(Map<String, dynamic> json) {
     var artboard = _$InheritedScaffoldFromJson(json)
-      // ..topLeftCorner = Point.topLeftFromJson(json)
-      // ..bottomRightCorner = Point.bottomRightFromJson(json)
+      // ..frame.topLeft = Point.topLeftFromJson(json)
+      // ..frame.bottomRight = Point.bottomRightFromJson(json)
       ..originalRef = json;
 
     //Map artboard children by calling `addChild` method

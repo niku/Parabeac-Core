@@ -42,13 +42,13 @@ class Padding extends PBVisualIntermediateNode {
 
     // Calculate art board with
     screenWidth = child.currentContext == null
-        ? (child.bottomRightCorner.x - child.topLeftCorner.x).abs()
+        ? (child.frame.bottomRight.x - child.frame.topLeft.x).abs()
         : (child.currentContext.screenBottomRightCorner.x -
                 child.currentContext.screenTopLeftCorner.x)
             .abs();
     // Calculate art board height
     screenHeight = child.currentContext == null
-        ? (child.bottomRightCorner.y - child.topLeftCorner.y).abs()
+        ? (child.frame.bottomRight.y - child.frame.topLeft.y).abs()
         : (child.currentContext.screenBottomRightCorner.y -
                 child.currentContext.screenTopLeftCorner.y)
             .abs();
