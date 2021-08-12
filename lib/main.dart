@@ -94,6 +94,8 @@ ${parser.usage}
 
   Future indexFileFuture;
   fileSystemAnalyzer = FileSystemAnalyzer(processInfo.genProjectPath);
+  interpretService = Interpret();
+
   fileSystemAnalyzer.addFileExtension('.dart');
 
   if (!(await fileSystemAnalyzer.projectExist())) {
