@@ -55,7 +55,7 @@ class InjectedTabBar extends PBEgg implements PBInjectedIntermediate {
       originalRef.name,
     );
 
-    originalRef.children.forEach(addChild);
+    originalRef.children.forEach(tabbar.addChild);
 
     return tabbar;
   }

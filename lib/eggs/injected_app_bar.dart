@@ -4,6 +4,7 @@ import 'package:parabeac_core/interpret_and_optimize/entities/injected_container
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_inherited_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/align_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'dart:math';
@@ -28,22 +29,31 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
   @override
   void addChild(PBIntermediateNode node) {
     if (node is PBInheritedIntermediate) {
-      var attName = 'child';
+      var attName;
       if (node.name.contains('<leading>')) {
         attName = 'leading';
-      }
-      if (node.name.contains('<trailing>')) {
-        attName = 'actions';
-      }
-      if (node.name.contains('<middle>')) {
+      } else if (node.name.contains('<middle>')) {
         attName = 'title';
+      } else if (node.name.contains('<trailing>')) {
+        attName = 'actions';
+        // If `node` is [PBLayoutIntermediateNode], extract its children
+        // so they can be individually wrapped inside `actions`.
+        if (node is PBLayoutIntermediateNode && node.children.isNotEmpty) {
+          node.children.forEach((element) {
+            element.attributeName = attName;
+            element.parent = this;
+          });
+          children.addAll(node.children);
+          return;
+        }
+      } else {
+        return;
       }
       node.attributeName = attName;
       children.add(node);
+      node.parent = this;
       return;
     }
-
-    super.addChild(node);
   }
 
   @override
@@ -54,7 +64,7 @@ class InjectedAppbar extends PBEgg implements PBInjectedIntermediate {
       originalRef.name,
     );
 
-    originalRef.children.forEach(addChild);
+    originalRef.children.forEach(appbar.addChild);
 
     return appbar;
   }
@@ -101,23 +111,29 @@ class PBAppBarGenerator extends PBGenerator {
 
       buffer.write('AppBar(');
 
-      source.children.forEach((child) {
+      var actions = source.getAllAtrributeNamed('actions');
+
+      // Write actions inside list
+      if (actions.isNotEmpty) {
+        buffer.write('actions: [');
+        actions.forEach((element) {
+          buffer.write(
+              '${_wrapOnIconButton(element.generator.generate(element, generatorContext))},');
+        });
+        buffer.write('],');
+      }
+
+      // Write `leading` and `title` attributes
+      source.children
+          .where((c) => c.attributeName != 'actions')
+          .forEach((child) {
         buffer.write(
-            '${child.attributeName}: ${_wrapOnBrackets(child.generator.generate(child, generatorContext), child == 'actions', child == 'leading')},');
+            '${child.attributeName}: ${_wrapOnIconButton(child.generator.generate(child, generatorContext))},');
       });
 
       buffer.write(')');
       return buffer.toString();
     }
-  }
-
-  String _wrapOnBrackets(String body, bool isActions, bool isLeading) {
-    if (isActions) {
-      return '[${_wrapOnIconButton(body)}]';
-    } else if (isLeading) {
-      return _wrapOnIconButton(body);
-    }
-    return '$body';
   }
 
   String _wrapOnIconButton(String body) {
