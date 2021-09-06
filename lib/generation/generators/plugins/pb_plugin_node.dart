@@ -9,6 +9,12 @@ abstract class PBEgg extends PBVisualIntermediateNode {
   /// The allow list semantic name to detect this node.
   String semanticName;
 
+  /// Boolean that is `true` if [this] tag should completely replace
+  /// the [PBIntermediateNode] containing the matching `semanticName`.
+  /// 
+  /// If `false`, then the [PBIntermediateNode] should likely be wrapped in [this].
+  bool shouldReplaceINode;
+
   PBEgg(
     String UUID,
     Rectangle3D frame,
@@ -17,7 +23,9 @@ abstract class PBEgg extends PBVisualIntermediateNode {
           UUID,
           frame,
           name,
-        );
+        ) {
+    shouldReplaceINode = true;
+  }
 
   /// Override this function if you want to make tree modification prior to the layout service.
   /// Be sure to return something or you will remove the node from the tree.

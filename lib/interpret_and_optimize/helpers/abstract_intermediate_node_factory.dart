@@ -60,7 +60,17 @@ class AbstractIntermediateNodeFactory {
           if (tag != null) {
             /// [iNode] needs a parent and has not been added to the [tree] by [tree.addEdges]
             iNode.parent = parent;
-            tree.replaceNode(iNode, tag, acceptChildren: true);
+
+            // Remove `iNode` completely from tree
+            if (tag.shouldReplaceINode) {
+              tree.replaceNode(iNode, tag, acceptChildren: true);
+            }
+            // The following is in case `tag` is wrapping `iNode`,
+            // which means we do not want to remove `iNode` from the tree entirely.
+            else {
+              tree.removeEdges(iNode.parent, [iNode]);
+              tree.addEdges(iNode.parent, [tag]);
+            }
 
             return tag;
           }

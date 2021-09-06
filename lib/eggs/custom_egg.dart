@@ -7,6 +7,7 @@ import 'package:parabeac_core/generation/generators/plugins/pb_plugin_node.dart'
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/commands/write_symbol_command.dart';
 import 'package:parabeac_core/generation/generators/value_objects/file_structure_strategy/file_ownership_policy.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/interfaces/pb_injected_intermediate.dart';
+import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_layout_intermediate_node.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/child_strategy.dart';
 import 'package:parabeac_core/interpret_and_optimize/helpers/pb_context.dart';
 import 'package:parabeac_core/interpret_and_optimize/entities/subclasses/pb_intermediate_node.dart';
@@ -34,8 +35,18 @@ class CustomEgg extends PBEgg implements PBInjectedIntermediate {
   @override
   PBEgg generatePluginNode(Rectangle3D frame, PBIntermediateNode originalRef,
       PBIntermediateTree tree) {
-    return CustomEgg(originalRef.UUID, frame,
-        originalRef.name.replaceAll('<custom>', '').pascalCase);
+    originalRef.name = originalRef.name.replaceAll('<custom>', '');
+    var customEgg = CustomEgg(
+        null, frame, originalRef.name.replaceAll('<custom>', '').pascalCase);
+
+    /// If `originalRef` is not a [PBLayoutIntermediateNode] then that means
+    /// that we probably want to wrap `originalRef` in a custom tag, not replace `originalRef`.
+    if (originalRef is! PBLayoutIntermediateNode) {
+      customEgg.shouldReplaceINode = false;
+      tree.addEdges(customEgg, [originalRef]);
+    }
+
+    return customEgg;
   }
 }
 
